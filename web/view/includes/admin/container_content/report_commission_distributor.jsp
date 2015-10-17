@@ -63,9 +63,17 @@
                     </ul>
                     <div class="navbar-form navbar-right">
                         <div class="form-group">
+                            <label class="control-label">Ngày: </label>
+                            <select class="form-control change-date" controller="<c:url value="${PAGINATION.ROOT_CONTROLLER}${PAGINATION.childrenController}${PAGINATION.grandController}${PAGINATION.CHANGE_DAY}/"/>">
+                                <option value="-1" ${PAGINATION.day==-1?'selected':''}>-- Tất cả --</option>
+                                <option value="1" ${PAGINATION.day==1?'selected':''}>Trước ngày 15</option>
+                                <option value="2" ${PAGINATION.day==2?'selected':''}>Sau ngày 15</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
                             <label class="control-label">Tháng: </label>
                             <select class="form-control change-date" controller="<c:url value="${PAGINATION.ROOT_CONTROLLER}${PAGINATION.childrenController}${PAGINATION.grandController}${PAGINATION.CHANGE_MONTH}/"/>">
-                                <option value="-1">-- Tất cả --</option>
+                                <option value="-1" ${PAGINATION.month==-1?'selected':''}>-- Tất cả --</option>
                                 <c:forEach begin="1" end="12" var="month">
                                     <option value="${month}" ${PAGINATION.month==month?'selected':''}>Tháng ${month}</option>
                                 </c:forEach>
@@ -74,7 +82,7 @@
                         <div class="form-group">
                             <label class="control-label">Năm: </label>
                             <select class="form-control change-date" controller="<c:url value="${PAGINATION.ROOT_CONTROLLER}${PAGINATION.childrenController}${PAGINATION.grandController}${PAGINATION.CHANGE_YEAR}/"/>">
-                                <option value="-1">-- Tất cả --</option>
+                                <option value="-1" ${PAGINATION.year==-1?'selected':''}>-- Tất cả --</option>
                                 <c:forEach items="${f:findAllHistoryAwardYear()}" var="year">
                                     <option value="${year}" ${PAGINATION.year==year?'selected':''}>${year}</option>
                                 </c:forEach>

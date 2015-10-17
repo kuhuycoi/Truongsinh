@@ -2,6 +2,7 @@ package com.resources.controller;
 
 import com.resources.facade.HistoryAwardFacade;
 import com.resources.bean.ExcelFile;
+import com.resources.facade.HistoryPaymentFacade;
 import com.resources.pagination.admin.DefaultAdminPagination;
 import com.resources.pagination.admin.MessagePagination;
 import com.resources.pagination.admin.ReportPagination;
@@ -60,6 +61,17 @@ public class AdminReportController {
         if (reportPagination != null) {
             reportPagination.setCurrentPage(page);
         }
+        return comissionDistributorView(reportPagination, session);
+    }
+
+    @RequestMapping(value = "/ComissionDistributor/ChangeDay/{day}", method = RequestMethod.GET)
+    @ResponseBody
+    public ModelAndView changeDayComissionDistributorView(@PathVariable("day") int day, HttpSession session) {
+        ReportPagination reportPagination = (ReportPagination) session.getAttribute("COMISSION_DISTRIBUTOR_PAGINATION");
+        if (reportPagination == null) {
+            reportPagination = new ReportPagination("Thống kê hoa hồng nhà phân phối", "cusId", true, "/ComissionDistributor", "/report_commission_distributor");
+        }
+        reportPagination.setDay(day);
         return comissionDistributorView(reportPagination, session);
     }
 
@@ -225,11 +237,13 @@ public class AdminReportController {
         new HistoryAwardFacade().setExportTrianFile(file);
         return new ModelAndView("ExcelView", "myModel", file);
     }
+
     //Payment
     @RequestMapping(value = "/Payment", method = RequestMethod.GET)
     @ResponseBody
     public ModelAndView getDefaultPaymentView(HttpSession session) {
-        ReportPagination reportPagination = new ReportPagination("Danh sách thanh toán hoa hồng NPP", "DatetimeCreated", false, "/Payment", "/report_payment");
+        ReportPagination reportPagination = new ReportPagination("Danh sách thanh toán hoa hồng NPP", "datetimeCreated", false, "/Payment", "/report_payment");
+        reportPagination.setEditViewName("/report_payment_edit_modal");
         session.setAttribute("PAYMENT_PAGINATION", reportPagination);
         return new ModelAndView(DefaultAdminPagination.CONTAINER_FOLDER + reportPagination.getViewName());
     }
@@ -267,13 +281,50 @@ public class AdminReportController {
         return paymentView(reportPagination, session);
     }
 
+    @RequestMapping(value = "/Payment/ChangeDay/{day}", method = RequestMethod.GET)
+    @ResponseBody
+    public ModelAndView changeDayPaymentView(@PathVariable("day") int day, HttpSession session) {
+        ReportPagination reportPagination = (ReportPagination) session.getAttribute("PAYMENT_PAGINATION");
+        if (reportPagination == null) {
+            reportPagination = new ReportPagination("Danh sách thanh toán hoa hồng NPP", "datetimeCreated", false, "/Payment", "/report_payment");
+            reportPagination.setEditViewName("/report_payment_edit_modal");
+        }
+        reportPagination.setDay(day);
+        return paymentView(reportPagination, session);
+    }
+
+    @RequestMapping(value = "/Payment/ChangeMonth/{month}", method = RequestMethod.GET)
+    @ResponseBody
+    public ModelAndView changeMonthPaymentView(@PathVariable("month") int month, HttpSession session) {
+        ReportPagination reportPagination = (ReportPagination) session.getAttribute("PAYMENT_PAGINATION");
+        if (reportPagination == null) {
+            reportPagination = new ReportPagination("Danh sách thanh toán hoa hồng NPP", "datetimeCreated", false, "/Payment", "/report_payment");
+            reportPagination.setEditViewName("/report_payment_edit_modal");
+        }
+        reportPagination.setMonth(month);
+        return paymentView(reportPagination, session);
+    }
+
+    @RequestMapping(value = "/Payment/ChangeYear/{year}", method = RequestMethod.GET)
+    @ResponseBody
+    public ModelAndView changeYearPaymentView(@PathVariable("year") int year, HttpSession session) {
+        ReportPagination reportPagination = (ReportPagination) session.getAttribute("PAYMENT_PAGINATION");
+        if (reportPagination == null) {
+            reportPagination = new ReportPagination("Danh sách thanh toán hoa hồng NPP", "datetimeCreated", false, "/Payment", "/report_payment");
+            reportPagination.setEditViewName("/report_payment_edit_modal");
+        }
+        reportPagination.setYear(year);
+        return paymentView(reportPagination, session);
+    }
+
     @RequestMapping(value = "/Payment/Search", method = RequestMethod.POST,
             produces = "application/json; charset=utf-8")
     @ResponseBody
     public ModelAndView searchPaymentView(@RequestBody Map map, HttpSession session) {
         ReportPagination reportPagination = (ReportPagination) session.getAttribute("PAYMENT_PAGINATION");
         if (reportPagination == null) {
-            reportPagination = new ReportPagination("Danh sách thanh toán hoa hồng NPP", "DatetimeCreated", false, "/Payment", "/report_payment");
+            reportPagination = new ReportPagination("Danh sách thanh toán hoa hồng NPP", "datetimeCreated", false, "/Payment", "/report_payment");
+            reportPagination.setEditViewName("/report_payment_edit_modal");
         }
         String searchString = (String) map.get("searchString");
         if (StringUtils.isEmpty(searchString)) {
@@ -287,10 +338,45 @@ public class AdminReportController {
 
     private ModelAndView paymentView(ReportPagination reportPagination, HttpSession session) {
         if (reportPagination == null) {
-            reportPagination = new ReportPagination("Danh sách thanh toán hoa hồng NPP", "DatetimeCreated", false, "/Payment", "/report_payment");
+            reportPagination = new ReportPagination("Danh sách thanh toán hoa hồng NPP", "datetimeCreated", false, "/Payment", "/report_payment");
         }
-        new HistoryAwardFacade().pageDataTrian(reportPagination);
+        new HistoryPaymentFacade().pageDataPayment(reportPagination);
         session.setAttribute("PAYMENT_PAGINATION", reportPagination);
         return new ModelAndView(DefaultAdminPagination.AJAX_FOLDER + reportPagination.getViewName());
+    }
+
+    @RequestMapping(value = "/Payment/ViewEdit", method = RequestMethod.GET)
+    @ResponseBody
+    public ModelAndView getViewEdit(HttpSession session) {
+        ReportPagination reportPagination = (ReportPagination) session.getAttribute("PAYMENT_PAGINATION");
+        return new ModelAndView(DefaultAdminPagination.AJAX_FOLDER + reportPagination.getEditViewName());
+    }
+
+    @RequestMapping(value = "/Payment/Edit", method = RequestMethod.POST)
+    @ResponseBody
+    public ModelAndView finishPayment(@RequestBody Map map, HttpSession session, ModelMap mm) {
+        ModelAndView mAV = new ModelAndView(MessagePagination.MESSAGE_FOLDER + MessagePagination.MESSAGE_VIEW);
+        MessagePagination messagePagination;
+        Integer result = 0;
+        try {
+            result = new HistoryPaymentFacade().edit(map);
+        } catch (Exception e) {
+            messagePagination = new MessagePagination(MessagePagination.MESSAGE_TYPE_ERROR, "Lỗi", "Đã xảy ra lỗi! Thử lại sau!");
+            mm.put("MESSAGE_PAGINATION", messagePagination);
+            return mAV;
+        }
+
+        switch (result) {
+            case 1: {
+                messagePagination = new MessagePagination(MessagePagination.MESSAGE_TYPE_SUCCESS, "Thành công", "Kết toán thành công!");
+                mm.put("MESSAGE_PAGINATION", messagePagination);
+                return mAV;
+            }
+            default: {
+                messagePagination = new MessagePagination(MessagePagination.MESSAGE_TYPE_ERROR, "Lỗi", "Đã xảy ra lỗi! Thử lại sau!");
+                mm.put("MESSAGE_PAGINATION", messagePagination);
+                return mAV;
+            }
+        }
     }
 }

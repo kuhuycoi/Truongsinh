@@ -229,6 +229,10 @@ public class CustomFunction {
     public static List findAllHistoryAwardYear() {
         return new HistoryAwardFacade().findAllHistoryAwardYear();
     }
+    
+    public static List findAllHistoryPaymentYear() {
+        return new HistoryAwardFacade().findAllHistoryPaymentYear();
+    }
 
     public static List findAllPinSysCreatedDay() {
         return new PinSysFacade().findAllPinSysCreatedDay();

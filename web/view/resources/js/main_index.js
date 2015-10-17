@@ -232,9 +232,14 @@ $(document).ready(function () {
             });
         }
     });
-    
-    $(document).on('click','#ajax-nav ul>li>a',function(){
-        $('html, body').stop().animate({scrollTop:$('#ajax-content').position().top},300);
+
+    $(document).on('click', '#ajax-nav ul>li>a', function () {
+        $('html, body').stop().animate({scrollTop: $('#ajax-content').position().top}, 300);
+    });
+
+    initDatePicker();
+    $(document).ajaxComplete(function () {
+        initDatePicker();
     });
 });
 wow = new WOW({
@@ -243,6 +248,16 @@ wow = new WOW({
     mobile: false
 });
 wow.init();
+function initDatePicker() {
+    $('.input-group.datepicker input').datepicker({
+        autoclose: true,
+        orientation: "bottom left",
+        todayHighlight: true,
+        language: "vi",
+        toggleActive: true,
+        endDate: new Date()
+    });
+}
 function sendAjaxNormal(url, handle) {
     $.ajax({
         url: url,
@@ -409,8 +424,8 @@ function initDiagram(datas) {
     }
     var ctv = $(go.Brush, "Linear", {0: "rgb(75, 108, 183", 1: "rgb(24, 40, 72)"});
     var npp = $(go.Brush, "Linear", {0: "rgb(170, 7, 107)", 1: "rgb(97, 4, 95)"});
-    var cvdab1 = $(go.Brush, "Linear", {0: "#a90329",1:"#6d0019"});
-    var cvdab2 = $(go.Brush, "Linear", {0: "#febf01", 1: "#eab92d"});    
+    var cvdab1 = $(go.Brush, "Linear", {0: "#a90329", 1: "#6d0019"});
+    var cvdab2 = $(go.Brush, "Linear", {0: "#febf01", 1: "#eab92d"});
     var cvdab3 = $(go.Brush, "Linear", {0: "rgb(82, 194, 52)", 1: "rgb(29, 151, 108)"});
 
     // Set up a Part as a legend, and place it directly on the diagram
@@ -449,7 +464,7 @@ function initDiagram(datas) {
     }), $(go.TextBlock, "Chuyên viên dự án bậc 1", {
         font: "bold 8pt Helvetica, bold Arial, sans-serif",
         stroke: "#fff"
-    })),$(go.Panel, "Horizontal", {
+    })), $(go.Panel, "Horizontal", {
         row: 4, alignment: go.Spot.Left
     }, $(go.Shape, "Rectangle", {
         desiredSize: new go.Size(30, 30),
@@ -458,7 +473,7 @@ function initDiagram(datas) {
     }), $(go.TextBlock, "Chuyên viên dự án bậc 2", {
         font: "bold 8pt Helvetica, bold Arial, sans-serif",
         stroke: "#fff"
-    })),$(go.Panel, "Horizontal", {
+    })), $(go.Panel, "Horizontal", {
         row: 5, alignment: go.Spot.Left
     }, $(go.Shape, "Rectangle", {
         desiredSize: new go.Size(30, 30),
@@ -512,7 +527,7 @@ function initDiagram(datas) {
                         font: "bold 14px Arial",
                         stroke: "#FFF",
                         alignment: go.Spot.LeftCenter,
-                        editable:true
+                        editable: true
                     }, new go.Binding("text", "userName")),
                     $(go.Picture, {
                         row: 0, column: 1,

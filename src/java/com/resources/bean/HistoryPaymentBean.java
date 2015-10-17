@@ -1,84 +1,42 @@
-package com.resources.entity;
+package com.resources.bean;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
-import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 
 @Entity
-@Table(name = "HistoryPayment")
-public class HistoryPayment implements Serializable {
+public class HistoryPaymentBean implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ID")
     private Integer id;
-
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "DatetimeCreated", length = 23, insertable = false, updatable = false)
     private Date datetimeCreated;
-
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "OrderforDate", length = 23, insertable = false, updatable = false)
     private Date orderforDate;
-
-    @Column(name = "TotalMoney")
     private BigDecimal totalMoney;
-
-    @Column(name = "PercentPay")
     private Integer percentPay;
-
-    @Column(name = "TotalPay")
     private BigDecimal totalPay;
-
-    @Column(name = "isPay")
     private Boolean isPay;
-
-    @Column(name = "isBank")
     private Boolean isBank;
-
-    @Column(name = "isDelete")
     private Boolean isDelete;
-
-    @Column(name = "Descrip")
     private String descrip;
-
-    @Column(name = "CodeBank")
     private String codeBank;
-
-    @Column(name = "Bank")
+    private String chuTK;
+    private Integer adminId;
+    private String adminUsername;
+    private Integer provincialAgenciesID;
+    private String provincialAgenciesName;
+    private Integer customerID;
+    private String customerUsername;
+    private String customerFirstName;
+    private String customerLastName;
     private String bank;
 
-    @Column(name = "chuTK")
-    private String chuTK;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "Admcheck")
-    private Admin admcheck;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "ProvincialAgenciesID")
-    private ProvincialAgencies provincialAgenciesID;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "CustomerID")
-    private Customer customerID;
-
-    public HistoryPayment(Integer id) {
+    public HistoryPaymentBean(Integer id) {
         this.id = id;
     }
 
-    public HistoryPayment() {
+    public HistoryPaymentBean() {
     }
 
     public Integer getId() {
@@ -95,6 +53,14 @@ public class HistoryPayment implements Serializable {
 
     public void setDatetimeCreated(Date datetimeCreated) {
         this.datetimeCreated = datetimeCreated;
+    }
+
+    public Date getOrderforDate() {
+        return orderforDate;
+    }
+
+    public void setOrderforDate(Date orderforDate) {
+        this.orderforDate = orderforDate;
     }
 
     public BigDecimal getTotalMoney() {
@@ -161,44 +127,52 @@ public class HistoryPayment implements Serializable {
         this.chuTK = chuTK;
     }
 
-    public Admin getAdmcheck() {
-        return admcheck;
+    public Integer getAdminId() {
+        return adminId;
     }
 
-    public void setAdmcheck(Admin admcheck) {
-        this.admcheck = admcheck;
+    public void setAdminId(Integer adminId) {
+        this.adminId = adminId;
     }
 
-    public ProvincialAgencies getProvincialAgenciesID() {
+    public String getAdminUsername() {
+        return adminUsername;
+    }
+
+    public void setAdminUsername(String adminUsername) {
+        this.adminUsername = adminUsername;
+    }
+
+    public Integer getProvincialAgenciesID() {
         return provincialAgenciesID;
     }
 
-    public void setProvincialAgenciesID(ProvincialAgencies provincialAgenciesID) {
+    public void setProvincialAgenciesID(Integer provincialAgenciesID) {
         this.provincialAgenciesID = provincialAgenciesID;
     }
 
-    public Customer getCustomerID() {
+    public String getProvincialAgenciesName() {
+        return provincialAgenciesName;
+    }
+
+    public void setProvincialAgenciesName(String provincialAgenciesName) {
+        this.provincialAgenciesName = provincialAgenciesName;
+    }
+
+    public Integer getCustomerID() {
         return customerID;
     }
 
-    public void setCustomerID(Customer customerID) {
+    public void setCustomerID(Integer customerID) {
         this.customerID = customerID;
     }
 
-    public Date getOrderforDate() {
-        return orderforDate;
+    public String getCustomerUsername() {
+        return customerUsername;
     }
 
-    public void setOrderforDate(Date orderforDate) {
-        this.orderforDate = orderforDate;
-    }
-
-    public Boolean getIsBank() {
-        return isBank;
-    }
-
-    public void setIsBank(Boolean isBank) {
-        this.isBank = isBank;
+    public void setCustomerUsername(String customerUsername) {
+        this.customerUsername = customerUsername;
     }
 
     public String getBank() {
@@ -208,4 +182,29 @@ public class HistoryPayment implements Serializable {
     public void setBank(String bank) {
         this.bank = bank;
     }
+
+    public String getCustomerFirstName() {
+        return customerFirstName;
+    }
+
+    public void setCustomerFirstName(String customerFirstName) {
+        this.customerFirstName = customerFirstName;
+    }
+
+    public String getCustomerLastName() {
+        return customerLastName;
+    }
+
+    public void setCustomerLastName(String customerLastName) {
+        this.customerLastName = customerLastName;
+    }
+
+    public Boolean getIsBank() {
+        return isBank;
+    }
+
+    public void setIsBank(Boolean isBank) {
+        this.isBank = isBank;
+    }
+    
 }

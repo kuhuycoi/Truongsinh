@@ -209,6 +209,11 @@
         <function-signature>List findAllHistoryAwardYear()</function-signature>
     </function>
     <function>
+        <name>findAllHistoryPaymentYear</name>
+        <function-class>com.resources.function.CustomFunction</function-class>
+        <function-signature>List findAllHistoryPaymentYear()</function-signature>
+    </function>
+    <function>
         <name>findAllPinSysCreatedDay</name>
         <function-class>com.resources.function.CustomFunction</function-class>
         <function-signature>List findAllPinSysCreatedDay()</function-signature>

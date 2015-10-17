@@ -11,9 +11,7 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,16 +24,6 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 @RequestMapping(value = "/Customer")
 public class IndexCustomerController {
-
-    @Autowired
-    HttpSession session;
-    private final CustomerFacade cFacade;
-    private final CustomerPagination treeCustomerPagination;
-
-    public IndexCustomerController() {
-        cFacade = new CustomerFacade();
-        treeCustomerPagination = new CustomerPagination("/customer_tree_customer", "/TreeCustomer");
-    }
 
     @RequestMapping(value = "/Login", method = RequestMethod.GET)
     @ResponseBody
@@ -67,9 +55,6 @@ public class IndexCustomerController {
         }
         try {
             Integer rs = 0;
-            //chỗ này check username hoặc title giống với cus.getUserName() và email giống với cus.getEmail(). Viết vào CustomerFacade
-            //Nếu tồn tại thì reset mật khẩu thành random 6 số, có cả chữ thì tốt rồi gửi mail về cus.getEmail(), gửi mail thất bại thì vẫn rs mk
-            // rs = integer trả về tương ứng như sau 
             switch (rs) {
                 case 1: {
                     messagePagination = new MessagePagination(MessagePagination.MESSAGE_TYPE_ERROR, "Chú ý", "Tên đăng nhập hoặc email không hợp lệ!");
@@ -107,7 +92,7 @@ public class IndexCustomerController {
 
     @RequestMapping(value = "/ChangePassword", method = RequestMethod.POST)
     @ResponseBody
-    public ModelAndView changePassword(@RequestBody Map map, ModelMap mm) {
+    public ModelAndView changePassword(@RequestBody Map map, ModelMap mm,HttpSession session) {
         ModelAndView mAV = new ModelAndView(MessagePagination.MESSAGE_FOLDER + MessagePagination.MESSAGE_VIEW);
         MessagePagination messagePagination;
         String oldPassword = (String) map.get("oldPassword");
@@ -123,7 +108,7 @@ public class IndexCustomerController {
         newPassword = CustomFunction.md5(newPassword);
         Integer cusid = (Integer) session.getAttribute("CUSTOMER_ID");
         try {
-            Customer cus = (Customer) cFacade.find(cusid);
+            Customer cus = (Customer) new CustomerFacade().find(cusid);
             if (!oldPassword.equals(cus.getPassword())) {
                 messagePagination = new MessagePagination(MessagePagination.MESSAGE_TYPE_ERROR, "Lỗi", "Mật khẩu không chính xác!");
                 mm.put("MESSAGE_PAGINATION", messagePagination);
@@ -135,7 +120,7 @@ public class IndexCustomerController {
                 return mAV;
             }
             cus.setPassword(newPassword);
-            cFacade.edit(cus);
+            new CustomerFacade().edit(cus);
             messagePagination = new MessagePagination(MessagePagination.MESSAGE_TYPE_SUCCESS, "Thành công", "Cập nhật mật khẩu thành công!");
             mm.put("MESSAGE_PAGINATION", messagePagination);
             return mAV;
@@ -159,7 +144,7 @@ public class IndexCustomerController {
         }
         cus.setPassword(CustomFunction.md5(cus.getPassword()));
         try {
-            cus = cFacade.login(cus);
+            cus = new CustomerFacade().login(cus);
             if (cus == null) {
                 messagePagination = new MessagePagination(MessagePagination.MESSAGE_TYPE_ERROR, "Lỗi", "Sai tên đăng nhập hoặc mật khẩu!");
                 mm.put("MESSAGE_PAGINATION", messagePagination);
@@ -195,7 +180,7 @@ public class IndexCustomerController {
         MessagePagination mP;
         Integer result;
         try {
-            result = cFacade.activeCustomer(id);
+            result = new CustomerFacade().activeCustomer(id);
         } catch (Exception e) {
             mP = new MessagePagination(MessagePagination.MESSAGE_TYPE_ERROR, "Lỗi", "Đã xảy ra lỗi! Vui lòng thử lại sau!");
             mm.put("MESSAGE_PAGINATION", mP);
@@ -233,7 +218,7 @@ public class IndexCustomerController {
         customerNonActive.setUserName(customerNonActive.getTitle());
         int result;
         try {
-            result = cFacade.create(customerNonActive);
+            result = new CustomerFacade().create(customerNonActive);
         } catch (Exception ex) {
             mP = new MessagePagination(MessagePagination.MESSAGE_TYPE_ERROR, "Lỗi", "Đã xảy ra lỗi. Thử lại sau!");
             mm.put("MESSAGE_PAGINATION", mP);
@@ -293,14 +278,14 @@ public class IndexCustomerController {
     //Edit Customer
     @RequestMapping(value = "/Edit", method = RequestMethod.POST)
     @ResponseBody
-    public ModelAndView editCustomer(@RequestBody CustomerNonActive customerNonActive, ModelMap mm) {
+    public ModelAndView editCustomer(@RequestBody CustomerNonActive customerNonActive, ModelMap mm,HttpSession session) {
         ModelAndView mAV = new ModelAndView(DefaultIndexPagination.MESSAGE_FOLDER + MessagePagination.MESSAGE_VIEW);
         MessagePagination mP;
         customerNonActive.setId((Integer) session.getAttribute("CUSTOMER_ID"));
         System.out.println(customerNonActive.getGender());
         int result;
         try {
-            result = cFacade.edit(customerNonActive);
+            result = new CustomerFacade().edit(customerNonActive);
         } catch (Exception ex) {
             mP = new MessagePagination(MessagePagination.MESSAGE_TYPE_ERROR, "Lỗi", "Đã xảy ra lỗi. Thử lại sau!");
             mm.put("MESSAGE_PAGINATION", mP);
@@ -327,18 +312,18 @@ public class IndexCustomerController {
         Integer children = (Integer) session.getAttribute("CUSTOMER_ID");
         List tree = null;
         try {
-            tree = cFacade.getTreeCustomer(children, null);
+            tree = new CustomerFacade().getTreeCustomer(children, null);
         } catch (Exception ex) {
             Logger.getLogger(IndexCustomerController.class.getName()).log(Level.SEVERE, null, ex);
         }
         mm.put("LIST_TREE", tree);
-        return new ModelAndView(DefaultIndexPagination.AJAX_FOLDER + treeCustomerPagination.getViewName());
+        return new ModelAndView(DefaultIndexPagination.AJAX_FOLDER + new CustomerPagination("/customer_tree_customer", "/TreeCustomer").getViewName());
     }
 
     //CustomerForCustomer
     @RequestMapping(value = "/CustomerForCustomer", method = RequestMethod.GET)
     @ResponseBody
-    public ModelAndView getDefaultDistributorView(ModelMap mm) {
+    public ModelAndView getDefaultDistributorView(ModelMap mm,HttpSession session) {
         CustomerPagination customerForCustomerPagination = new CustomerPagination("/customer_for_customer", "/CustomerForCustomer");
         session.setAttribute("INDEX_CUSTOMER_FOR_CUSTOMER_PAGINATION", customerForCustomerPagination);
         return new ModelAndView(DefaultIndexPagination.CONTAINER_FOLDER + customerForCustomerPagination.getViewName());
@@ -352,7 +337,7 @@ public class IndexCustomerController {
             customerForCustomerPagination.setDisplayPerPage(displayPerPage);
 
         }
-        return distributorView(customerForCustomerPagination);
+        return distributorView(customerForCustomerPagination,session);
     }
 
     @RequestMapping(value = "/CustomerForCustomer/OrderData/{orderBy}", method = RequestMethod.GET)
@@ -365,7 +350,7 @@ public class IndexCustomerController {
             }
             customerForCustomerPagination.setOrderColmn(orderBy);
         }
-        return distributorView(customerForCustomerPagination);
+        return distributorView(customerForCustomerPagination,session);
     }
 
     @RequestMapping(value = "/CustomerForCustomer/GoTo/{page}", method = RequestMethod.GET)
@@ -375,14 +360,14 @@ public class IndexCustomerController {
         if (customerForCustomerPagination != null) {
             customerForCustomerPagination.setCurrentPage(page);
         }
-        return distributorView(customerForCustomerPagination);
+        return distributorView(customerForCustomerPagination,session);
     }
 
-    private ModelAndView distributorView(CustomerPagination customerForCustomerPagination) {
+    private ModelAndView distributorView(CustomerPagination customerForCustomerPagination,HttpSession session) {
         if (customerForCustomerPagination == null) {
             customerForCustomerPagination = new CustomerPagination("/customer_for_customer", "/CustomerForCustomer");
         }
-        cFacade.pageData(customerForCustomerPagination, (Integer) session.getAttribute("CUSTOMER_ID"));
+        new CustomerFacade().pageData(customerForCustomerPagination, (Integer) session.getAttribute("CUSTOMER_ID"));
         session.setAttribute("INDEX_CUSTOMER_FOR_CUSTOMER_PAGINATION", customerForCustomerPagination);
         return new ModelAndView(DefaultIndexPagination.AJAX_FOLDER + customerForCustomerPagination.getViewName());
     }
@@ -391,7 +376,7 @@ public class IndexCustomerController {
     @RequestMapping(value = "/SearchParentId/{searchString}", method = RequestMethod.GET)
     @ResponseBody
     public ModelAndView searchParentId(@PathVariable("searchString") String searchString, ModelMap mm) {
-        mm.put("PARENTIDLIST", cFacade.findAllCustomerForParentId(searchString));
+        mm.put("PARENTIDLIST", new CustomerFacade().findAllCustomerForParentId(searchString));
         return new ModelAndView(DefaultIndexPagination.AJAX_FOLDER + "/customer_parentid_list");
     }
 
@@ -399,7 +384,7 @@ public class IndexCustomerController {
     @RequestMapping(value = "/SearchCustomerId/{searchString}", method = RequestMethod.GET)
     @ResponseBody
     public ModelAndView searchCustomerId(@PathVariable("searchString") String searchString, ModelMap mm) {
-        mm.put("PARENTIDLIST", cFacade.findAllCustomerForCustomerId(searchString));
+        mm.put("PARENTIDLIST", new CustomerFacade().findAllCustomerForCustomerId(searchString));
         return new ModelAndView(DefaultIndexPagination.AJAX_FOLDER + "/customer_parentid_list");
     }
 
@@ -407,7 +392,7 @@ public class IndexCustomerController {
     @RequestMapping(value = "/SearchCustomerId/{searchString}/{parentName}", method = RequestMethod.GET)
     @ResponseBody
     public ModelAndView searchCustomerId(@PathVariable("searchString") String searchString, @PathVariable("parentName") String parentName, ModelMap mm) {
-        mm.put("PARENTIDLIST", cFacade.findAllCustomerForCustomerId(searchString));
+        mm.put("PARENTIDLIST", new CustomerFacade().findAllCustomerForCustomerId(searchString));
         return new ModelAndView(DefaultIndexPagination.AJAX_FOLDER + "/customer_parentid_list");
     }
 }

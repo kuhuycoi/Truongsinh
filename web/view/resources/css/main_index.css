@@ -62,7 +62,7 @@ input[type="email"],
 input[type="url"], 
 input[type="search"], 
 input[type="tel"], 
-input[type="color"],select{background-color: #fff;background-image: none;border-radius: 0;color: #555;display: block;font-size: 14px;height: 34px;line-height: 1.428571429;min-width: 250px;o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;outline: none !important;padding: 6px 12px;transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;webkit-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;}
+input[type="color"],select{background-color: #fff;background-image: none;border-radius: 0;color: #555;display: block;font-size: 14px;height: 34px;line-height: 1.428571429;o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;outline: none !important;padding: 6px 12px;transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;webkit-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;}
 #gotoTop{background: url(../img/icon/up-arrow.png) no-repeat #3498db center 20px;border-radius: 50%;bottom: 10px;display: none;height: 50px;moz-transition: all 0.2s ease-in-out 0s;o-transition: all 0.2s ease-in-out 0s;padding: 12px 14px;position: fixed;right: 30px;transition: all 0.2s ease-in-out 0s;webkit-transition: all 0.2s ease-in-out 0s;width: 50px;z-index: 100;}
 #gotoTop:hover{background-color: #666;}
 .menu-left>li{float: left;}
@@ -116,12 +116,12 @@ input[type="color"],select{background-color: #fff;background-image: none;border-
 #ajax-nav .panel .panel-body ul li>a:before{content: "\f0da";display: inline-block;font-family: FontAwesome;line-height: 35px;margin-right: 10px;}
 #ajax-nav .panel .panel-body ul>li>a:hover{padding-left: 10px;}
 #ajax-content{overflow: auto;padding: 0 20px;}
-#ajax-content .ajax-content{margin-top: 10px;}
+#ajax-content .ajax-content{margin-top: 10px;max-height: 1000px;overflow-y: auto}
 #ajax-content>h1{font-size: 22px;font-weight: normal;margin: 0;padding: 5px 0 15px;text-transform: uppercase;}
 #ajax-content .panel{background-color: #f7f7f7;border: 1px solid #eee;border-radius: 0;box-shadow: none;}
 #ajax-content .panel .panel-heading h2{background: url(../img/icon/i_page2.gif) no-repeat;background-position: 0 1px;background-repeat: no-repeat;border-bottom: 1px solid #e5e5e5;color: #444443;display: inline-block;font-size: 15px;font-weight: normal;margin: 0 0 20px;padding: 0 0 5px 23px;text-transform: uppercase;width: 100%;}
 #ajax-content .panel .panel-body p{color: #888;margin: 10px 0 10px;}
-#ajax-content .panel .panel-body{padding-top: 0;}
+#ajax-content .panel .panel-body{padding-top: 0}
 #ajax-content .panel .panel-body .row{margin-top: 10px;padding: 5px 10px;}
 #ajax-content .panel .panel-body .row label{color: #937A64;font-weight: normal;}
 .buttonBar{border-top: 3px solid #937A64;display: block;margin: 10px 0px;padding: 10px;width: 100%;}

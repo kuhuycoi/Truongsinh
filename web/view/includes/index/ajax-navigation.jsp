@@ -87,7 +87,7 @@
     </div>
     <div class="panel-body collapse in" id="collapseThree">
         <ul>
-            <li><a class="btn-change-content" controller="<c:url value="/Report/Award/1" />">Yêu cầu thanh toán</a></li>
+            <li><a class="btn-change-content" controller="<c:url value="/Payment/ViewInsert" />">Yêu cầu thanh toán</a></li>
             <li><a class="btn-change-content" controller="<c:url value="/Report/Award/4" />">Lich sử thanh toán</a></li>
         </ul>
     </div>

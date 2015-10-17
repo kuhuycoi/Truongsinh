@@ -22,6 +22,7 @@
         <link rel="stylesheet" href='<c:url value="/resources/css/latofonts.css"/>' type="text/css">
         <link rel="stylesheet" href='<c:url value="/resources/css/bootstrap.min.css"/>' type="text/css">
         <link rel="stylesheet" href='<c:url value="/resources/css/bootstrap-dialog.min.css"/>' type="text/css">
+        <link rel="stylesheet" href='<c:url value="/resources/css/bootstrap-datepicker3.min.css"/>' type="text/css">
         <link rel="stylesheet" href='<c:url value="/resources/css/animate.css"/>' type="text/css">
         <link rel="stylesheet" href='<c:url value="/resources/css/nprogress.css"/>' type="text/css">
         <link rel="stylesheet" href='<c:url value="/resources/css/reset-css.css"/>' type="text/css">
@@ -84,6 +85,9 @@
         <script src='<c:url value="/resources/js/bootstrap.min.js"/>'></script>
         <!-- Bootbox -->
         <script src='<c:url value="/resources/js/bootstrap-dialog.min.js"/>'></script>
+        <!-- date picker -->
+        <script src='<c:url value="/resources/js/bootstrap-datepicker.min.js"/>'></script>
+        <script src='<c:url value="/resources/js/bootstrap-datepicker.vi.min.js"/>'></script>
         <!-- Calendar -->
         <script src='<c:url value="/resources/js/jquery.calendar.js"/>'></script>
         <!-- MD5 script -->    

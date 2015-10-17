@@ -2,7 +2,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="f" uri="/WEB-INF/tlds/functions.tld" %>
-<c:set var="PAGINATION" value="${sessionScope['COMISSION_DISTRIBUTOR_PAGINATION']}"/>
+<c:set var="PAGINATION" value="${sessionScope['PAYMENT_PAGINATION']}"/>
 <c:if test="${f:size(PAGINATION.displayList)==0}">
     <div class="alert alert-danger">
         Không có kết quả nào được hiển thị
@@ -12,19 +12,37 @@
     <table class="table table-condensed table-hover table-valign-midle table-grid-view table-align-center">
         <thead>
             <tr controller="<c:url value='${PAGINATION.ROOT_CONTROLLER}${PAGINATION.childrenController}${PAGINATION.grandController}${PAGINATION.ORDER_DATA}/'/>">
-                <th class="th-id" column="cusId">ID <span class="${PAGINATION.orderColmn=='cusId'?(PAGINATION.asc?'fa fa-caret-up':'fa fa-caret-down'):''}"></span></th>
-                <th class="col-md-4 text-left" column="lastName">Tên NPP <span class="${PAGINATION.orderColmn=='lastName'?(PAGINATION.asc?'fa fa-caret-up':'fa fa-caret-down'):''}"></span></th>
-                <th class="col-md-3 text-left" column="userName">Username NPP <span class="${PAGINATION.orderColmn=='userName'?(PAGINATION.asc?'fa fa-caret-up':'fa fa-caret-down'):''}"></span></th>
-                <th class="col-md-3" column="pricePv">Hoa hồng <span class="${PAGINATION.orderColmn=='pricePv'?(PAGINATION.asc?'fa fa-caret-up':'fa fa-caret-down'):''}"></span></th>
+                <th class="th-id" column="id">ID <span class="${PAGINATION.orderColmn=='id'?(PAGINATION.asc?'fa fa-caret-up':'fa fa-caret-down'):''}"></span></th>
+                <th class="col-md-2 text-left" column="customerLastName">Tên <span class="${PAGINATION.orderColmn=='customerLastName'?(PAGINATION.asc?'fa fa-caret-up':'fa fa-caret-down'):''}"></span></th>
+                <th class="col-md-1 text-left" column="customerUsername">Username NPP <span class="${PAGINATION.orderColmn=='customerUsername'?(PAGINATION.asc?'fa fa-caret-up':'fa fa-caret-down'):''}"></span></th>
+                <th class="col-md-1 text-left" column="datetimeCreated">Ngày yêu cầu <span class="${PAGINATION.orderColmn=='datetimeCreated'?(PAGINATION.asc?'fa fa-caret-up':'fa fa-caret-down'):''}"></span></th>
+                <th class="col-md-1 text-left" column="bank">Ngân hàng <span class="${PAGINATION.orderColmn=='bank'?(PAGINATION.asc?'fa fa-caret-up':'fa fa-caret-down'):''}"></span></th>
+                <th class="col-md-1 text-left" column="codeBank">TK ngân hàng <span class="${PAGINATION.orderColmn=='codeBank'?(PAGINATION.asc?'fa fa-caret-up':'fa fa-caret-down'):''}"></span></th>
+                <th class="col-md-1 text-left" column="chuTK">Chủ TK <span class="${PAGINATION.orderColmn=='chuTK'?(PAGINATION.asc?'fa fa-caret-up':'fa fa-caret-down'):''}"></span></th>
+                <th class="col-md-1 text-left" column="provincialAgenciesName">Chi nhánh <span class="${PAGINATION.orderColmn=='provincialAgenciesName'?(PAGINATION.asc?'fa fa-caret-up':'fa fa-caret-down'):''}"></span></th>
+                <th class="col-md-1 text-left" column="orderforDate">Kỳ yêu cầu <span class="${PAGINATION.orderColmn=='orderforDate'?(PAGINATION.asc?'fa fa-caret-up':'fa fa-caret-down'):''}"></span></th>
+                <th class="col-md-1 text-left" column="totalMoney">Tổng tiền <span class="${PAGINATION.orderColmn=='totalMoney'?(PAGINATION.asc?'fa fa-caret-up':'fa fa-caret-down'):''}"></span></th>
+                <th class="col-md-1 text-left" column="percentPay">Tỉ lệ thanh toán <span class="${PAGINATION.orderColmn=='percentPay'?(PAGINATION.asc?'fa fa-caret-up':'fa fa-caret-down'):''}"></span></th>
+                <th class="col-md-1 text-left" column="totalPay">Tiền thanh toán <span class="${PAGINATION.orderColmn=='totalPay'?(PAGINATION.asc?'fa fa-caret-up':'fa fa-caret-down'):''}"></span></th>
+                <th class="col-md-1 text-left" column="descrip">Ghi chú <span class="${PAGINATION.orderColmn=='descrip'?(PAGINATION.asc?'fa fa-caret-up':'fa fa-caret-down'):''}"></span></th>
             </tr>
         </thead>
         <tbody>
-            <c:forEach items="${PAGINATION.displayList}" var="award">
+            <c:forEach items="${PAGINATION.displayList}" var="payment">
                 <tr>
-                    <td class="text-center">${award.cusId}</td>
-                    <td class="text-left">${award.firstName} ${award.lastName}</td>
-                    <td class="text-left">${award.userName}</td>
-                    <td>${f:formatCurrency(award.pricePv)}</td>
+                    <td class="text-center">${payment.id}</td>
+                    <td class="text-left">${payment.customerFirstName} ${payment.customerLastName}</td>
+                    <td class="text-left">${payment.customerUsername}</td>
+                    <td class="text-left">${f:formatTime(payment.datetimeCreated)}</td>
+                    <td class="text-left">${payment.bank}</td>
+                    <td class="text-left">${payment.codeBank}</td>
+                    <td class="text-left">${payment.chuTK}</td>
+                    <td class="text-left">${payment.provincialAgenciesName}</td>
+                    <td class="text-left">${f:formatTime(payment.orderforDate)}</td>
+                    <td class="text-left">${f:formatCurrency(payment.totalMoney)}</td>
+                    <td class="text-left">${f:formatPercent(payment.percentPay)}</td>
+                    <td class="text-left">${f:formatCurrency(payment.totalPay)}</td>
+                    <td class="text-left">${payment.descrip}</td>
                 </tr>
             </c:forEach>
         </tbody>

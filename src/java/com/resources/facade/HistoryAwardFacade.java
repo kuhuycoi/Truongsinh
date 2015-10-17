@@ -2,7 +2,6 @@ package com.resources.facade;
 
 import com.resources.bean.ExcelFile;
 import com.resources.bean.HistoryAward;
-import com.resources.entity.CustomerRankCustomer;
 import com.resources.entity.HistoryAwards;
 import com.resources.entity.Module;
 import com.resources.entity.Triandot2;
@@ -38,7 +37,7 @@ import org.hibernate.type.TimestampType;
 public class HistoryAwardFacade extends AbstractFacade {
 
     public HistoryAwardFacade() {
-        super(CustomerRankCustomer.class);
+        super(HistoryAwards.class);
     }
 
     public void pageData(HistoryPagination historyPagination) {
@@ -119,18 +118,22 @@ public class HistoryAwardFacade extends AbstractFacade {
                 }
                 cr.add(disj);
 
-                String queryString = "select count(*) from (select h.customerId from HistoryAwards h join Customer c "
-                        + "on h.CustomerId=c.id "
-                        + "where h.isDeleted=0";
-                if (pagination.getMonth() != null && pagination.getYear() != null) {
+                String queryString = "select count(*) from (select h.customerId from HistoryAwards h join Customer c on h.CustomerId=c.id where h.isDeleted=0";
+                if (pagination.getDay() != -1 && pagination.getMonth() != -1 && pagination.getYear() != -1) {
+                    if (pagination.getDay() == 1) {
+                        queryString += " and DAY(DateCreated)<=15";
+                    } else if (pagination.getDay() == 2) {
+                        queryString += " and DAY(DateCreated)>15";
+                    }
+                }
+                if (pagination.getMonth() != -1 && pagination.getYear() != -1) {
                     queryString += " and MONTH(h.dateCreated)=" + pagination.getMonth();
                 }
 
-                if (pagination.getYear() != null) {
+                if (pagination.getYear() != -1) {
                     queryString += " and YEAR(h.dateCreated)=" + pagination.getYear();
                 }
-                queryString += " and c.IsDelete=0 and c.IsActive=1 "
-                        + "group by h.customerId)z";
+                queryString += " and c.IsDelete=0 and c.IsActive=1 group by h.customerId)z";
                 Query q = session.createSQLQuery(queryString);
 
                 pagination.setTotalResult((Integer) q.uniqueResult());
@@ -769,6 +772,23 @@ public class HistoryAwardFacade extends AbstractFacade {
             session = HibernateConfiguration.getInstance().openSession();
             if (session != null) {
                 Query q = session.createSQLQuery("select YEAR(dateCreated) from HistoryAwards group by YEAR(dateCreated)");
+                result = q.list();
+            }
+        } catch (Exception e) {
+            Logger.getLogger(Module.class.getName()).log(Level.SEVERE, null, e);
+        } finally {
+            HibernateConfiguration.getInstance().closeSession(session);
+        }
+        return result;
+    }
+
+    public List findAllHistoryPaymentYear() {
+        Session session = null;
+        List result = null;
+        try {
+            session = HibernateConfiguration.getInstance().openSession();
+            if (session != null) {
+                Query q = session.createSQLQuery("select YEAR(datetimeCreated) from HistoryPayment group by YEAR(datetimeCreated)");
                 result = q.list();
             }
         } catch (Exception e) {
