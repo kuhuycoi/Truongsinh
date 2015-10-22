@@ -28,6 +28,10 @@ public class HistoryPayment implements Serializable {
     @Column(name = "[DatetimeCreated]", length = 23, insertable = false,updatable = false)
     private Date datetimeCreated;
     
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "[OrderforDate]", length = 23, insertable = false,updatable = false)
+    private Date orderforDate;
+    
     @Column(name = "TotalMoney")
     private BigDecimal totalMoney;
     
@@ -174,5 +178,12 @@ public class HistoryPayment implements Serializable {
     public void setCustomerID(Customer customerID) {
         this.customerID = customerID;
     }
-    
+
+    public Date getOrderforDate() {
+        return orderforDate;
+    }
+
+    public void setOrderforDate(Date orderforDate) {
+        this.orderforDate = orderforDate;
+    }    
 }
