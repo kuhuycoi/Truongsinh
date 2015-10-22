@@ -39,6 +39,7 @@
     <mapping class="com.resources.entity.StudyPromotion"/>
     <mapping class="com.resources.entity.RoleAdmin"/>
     <mapping class="com.resources.entity.ModuleInRole"/>
+    <mapping class="com.resources.entity.HistoryPayment"/>
     <mapping class="com.resources.bean.CustomerDistributor"/>
     <mapping class="com.resources.bean.CustomerFromTotalParent"/>
     <mapping class="com.resources.bean.CustomerNonActive"/>

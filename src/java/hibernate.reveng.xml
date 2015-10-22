@@ -30,4 +30,5 @@
   <table-filter match-name="StudyPromotion"/>
   <table-filter match-name="RoleAdmin"/>
   <table-filter match-name="ModuleInRole"/>
+  <table-filter match-name="HistoryPayment"/>
 </hibernate-reverse-engineering>
